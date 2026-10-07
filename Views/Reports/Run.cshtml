@@ -1,0 +1,18 @@
+@model ReportVm
+@{ ViewData["Title"] = Model.Title; }
+<div class="d-flex justify-content-between mb-3"><h3>@Model.Title</h3><a class="btn btn-outline-secondary" asp-action="Index">All reports</a></div>
+<form method="get" asp-action="Run" asp-route-id="@Model.Action" class="row g-2 mb-3">
+    <div class="col-md-2"><input type="date" name="from" value="@Model.From?.ToString("yyyy-MM-dd")" class="form-control" /></div>
+    <div class="col-md-2"><input type="date" name="to" value="@Model.To?.ToString("yyyy-MM-dd")" class="form-control" /></div>
+    <div class="col-md-2"><select name="sort" class="form-select"><option value="">Sort by…</option>
+        @for (var i = 0; i < Model.Columns.Length; i++) { <option value="@i" selected="@(Model.Sort == i)">@Model.Columns[i]</option> }</select></div>
+    <div class="col-md-2"><button class="btn btn-outline-primary w-100">Apply</button></div>
+    <div class="col-md-2"><button class="btn btn-success w-100" name="export" value="true"><i class="bi bi-download"></i> Export CSV</button></div>
+</form>
+<div class="table-responsive card"><table class="table table-sm table-hover mb-0">
+    <thead class="table-light"><tr>@foreach (var c in Model.Columns) { <th>@c</th> }</tr></thead><tbody>
+    @foreach (var r in Model.Rows) { <tr>@foreach (var cell in r) { <td>@cell</td> }</tr> }
+    @if (!Model.Rows.Any()) { <tr><td colspan="@Model.Columns.Length" class="text-center text-muted py-4">No data for the selected filters.</td></tr> }
+</tbody></table></div>
+<div class="text-muted small mt-2">@Model.Total record(s)</div>
+<div class="mt-2"><partial name="_Pager" model="Model" /></div>

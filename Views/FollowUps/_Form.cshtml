@@ -1,0 +1,16 @@
+@model FollowUp
+<div asp-validation-summary="ModelOnly" class="alert alert-danger py-2"></div>
+<div class="row g-3">
+    <div class="col-md-4"><label asp-for="CustomerId" class="form-label"></label><select asp-for="CustomerId" asp-items="(SelectList)ViewBag.Customers" class="form-select"><option value="">-- None --</option></select><span asp-validation-for="CustomerId" class="text-danger"></span></div>
+    <div class="col-md-4"><label asp-for="LeadId" class="form-label"></label><select asp-for="LeadId" asp-items="(SelectList)ViewBag.Leads" class="form-select"><option value="">-- None --</option></select><span asp-validation-for="LeadId" class="text-danger"></span></div>
+    <div class="col-md-4"><label asp-for="OpportunityId" class="form-label"></label><select asp-for="OpportunityId" asp-items="(SelectList)ViewBag.Opportunities" class="form-select"><option value="">-- None --</option></select><span asp-validation-for="OpportunityId" class="text-danger"></span></div>
+    <div class="col-md-6"><label asp-for="Subject" class="form-label"></label><input asp-for="Subject" class="form-control" /><span asp-validation-for="Subject" class="text-danger"></span></div>
+    <div class="col-md-2"><label asp-for="FollowUpType" class="form-label"></label><select asp-for="FollowUpType" asp-items="Html.GetEnumSelectList<ActivityType>()" class="form-select"></select></div>
+    <div class="col-md-2"><label asp-for="FollowUpDate" class="form-label"></label><input asp-for="FollowUpDate" class="form-control" type="date" /><span asp-validation-for="FollowUpDate" class="text-danger"></span></div>
+    <div class="col-md-2"><label asp-for="AssignedTo" class="form-label"></label><select asp-for="AssignedTo" asp-items="(SelectList)ViewBag.Users" class="form-select"></select><span asp-validation-for="AssignedTo" class="text-danger"></span></div>
+    @if (Model.FollowUpId != 0)
+    { <div class="col-md-3"><label asp-for="Status" class="form-label"></label><select asp-for="Status" asp-items="Html.GetEnumSelectList<FollowUpStatus>()" class="form-select"></select></div> }
+    else
+    { <input type="hidden" name="Status" value="Planned" /> }
+    <div class="col-12"><label asp-for="Remarks" class="form-label"></label><textarea asp-for="Remarks" class="form-control" rows="3"></textarea></div>
+</div>

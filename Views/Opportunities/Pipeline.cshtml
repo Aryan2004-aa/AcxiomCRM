@@ -1,0 +1,16 @@
+@model List<Opportunity>
+@{ ViewData["Title"] = "Sales Pipeline"; }
+<h3 class="mb-3">Sales Pipeline</h3>
+<div class="d-flex gap-3 overflow-auto pb-3">
+@foreach (var stage in Enum.GetValues<OpportunityStage>())
+{
+    var items = Model.Where(o => o.Stage == stage).ToList();
+    <div class="pipeline-col"><div class="card">
+        <div class="card-header"><b>@stage</b> <span class="badge bg-secondary">@items.Count</span><div class="small text-muted">₹@items.Sum(i => i.Amount).ToString("N0") · weighted ₹@items.Sum(i => i.Weighted).ToString("N0")</div></div>
+        <div class="list-group list-group-flush">
+        @foreach (var o in items)
+        { <a class="list-group-item list-group-item-action" asp-action="Details" asp-route-id="@o.OpportunityId"><div class="fw-semibold">@o.OpportunityName</div>
+            <div class="small">@o.Customer?.CustomerName · ₹@o.Amount.ToString("N0") · @o.Probability%</div><div class="small text-muted">Close @o.ExpectedCloseDate.ToString("dd MMM") · @o.AssignedUser?.FullName</div></a> }
+        </div></div></div>
+}
+</div>

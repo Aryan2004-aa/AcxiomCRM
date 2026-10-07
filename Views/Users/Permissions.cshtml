@@ -1,0 +1,14 @@
+@{ ViewData["Title"] = "Permissions"; }
+<h3 class="mb-3">Permission Matrix</h3>
+<div class="card"><table class="table mb-0"><thead class="table-light"><tr><th>Module</th><th>Admin</th><th>Manager</th><th>Sales Executive</th></tr></thead><tbody>
+    <tr><td>Dashboard</td><td>Full</td><td>Team</td><td>Own / assigned</td></tr>
+    <tr><td>Customers</td><td>Full</td><td>Team (incl. deactivate)</td><td>Own / assigned (no delete)</td></tr>
+    <tr><td>Leads</td><td>Full</td><td>Team (incl. delete)</td><td>Own / assigned (no delete)</td></tr>
+    <tr><td>Opportunities</td><td>Full</td><td>Team (incl. delete)</td><td>Own / assigned (no delete)</td></tr>
+    <tr><td>Follow-Ups / Activities</td><td>Full</td><td>Team</td><td>Own / assigned</td></tr>
+    <tr><td>User &amp; Role Management</td><td>Full</td><td>No</td><td>No</td></tr>
+    <tr><td>Audit Log</td><td>Full</td><td>No</td><td>No</td></tr>
+    <tr><td>Reports</td><td>All</td><td>Management / team (no audit)</td><td>Own / assigned (no user-activity/audit)</td></tr>
+    <tr><td>REST API</td><td>Authorized endpoints</td><td>Authorized endpoints</td><td>Authorized endpoints (scoped)</td></tr>
+</tbody></table></div>
+<p class="text-muted mt-2">All rules are enforced on the server (controller authorization + data scoping), not just by hiding menu items.</p>

@@ -1,0 +1,14 @@
+@model Customer
+<div asp-validation-summary="ModelOnly" class="alert alert-danger py-2"></div>
+<div class="row g-3">
+    <div class="col-md-6"><label asp-for="CustomerName" class="form-label"></label><input asp-for="CustomerName" class="form-control" /><span asp-validation-for="CustomerName" class="text-danger"></span></div>
+    <div class="col-md-6"><label asp-for="CompanyName" class="form-label"></label><input asp-for="CompanyName" class="form-control" /><span asp-validation-for="CompanyName" class="text-danger"></span></div>
+    <div class="col-md-6"><label asp-for="Email" class="form-label"></label><input asp-for="Email" class="form-control" /><span asp-validation-for="Email" class="text-danger"></span></div>
+    <div class="col-md-6"><label asp-for="Phone" class="form-label"></label><input asp-for="Phone" class="form-control" maxlength="10" inputmode="numeric" /><span asp-validation-for="Phone" class="text-danger"></span><div class="form-text">10-digit Indian mobile number.</div></div>
+    <div class="col-12"><label asp-for="Address" class="form-label"></label><input asp-for="Address" class="form-control" /><span asp-validation-for="Address" class="text-danger"></span></div>
+    <div class="col-md-4"><label asp-for="City" class="form-label"></label><input asp-for="City" class="form-control" /><span asp-validation-for="City" class="text-danger"></span></div>
+    <div class="col-md-4"><label asp-for="State" class="form-label"></label><input asp-for="State" class="form-control" /><span asp-validation-for="State" class="text-danger"></span></div>
+    <div class="col-md-2"><label asp-for="Status" class="form-label"></label><select asp-for="Status" asp-items="Html.GetEnumSelectList<CustomerStatus>()" class="form-select"></select><span asp-validation-for="Status" class="text-danger"></span></div>
+    <div class="col-md-2"><label asp-for="AssignedTo" class="form-label"></label><select asp-for="AssignedTo" asp-items="(SelectList)ViewBag.Users" class="form-select"></select><span asp-validation-for="AssignedTo" class="text-danger"></span></div>
+    <div class="col-12"><label asp-for="Notes" class="form-label"></label><textarea asp-for="Notes" class="form-control" rows="3"></textarea><span asp-validation-for="Notes" class="text-danger"></span></div>
+</div>

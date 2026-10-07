@@ -1,0 +1,20 @@
+@{ ViewData["Title"] = "Reports"; var priv = User.IsInRole(Roles.Admin) || User.IsInRole(Roles.Manager); }
+<h3 class="mb-3">Reports</h3>
+<div class="row g-3">
+@{
+    var list = new List<(string id, string name, string desc)> {
+        ("customers", "Customer Report", "Customer list, status, owner and creation date."),
+        ("leads", "Lead Report", "Lead source, status, owner and conversion."),
+        ("followups", "Follow-Up Report", "Planned, completed, missed and overdue activities."),
+        ("opportunities", "Opportunity Report", "Stage, amount, probability and expected close date."),
+        ("pipeline", "Pipeline Report", "Stage-wise and owner-wise (weighted) pipeline."),
+        ("conversion", "Sales / Conversion Report", "Lead conversion and opportunity outcome metrics.") };
+    if (priv) list.Add(("useractivity", "User Activity Report", "Action counts per user."));
+    if (User.IsInRole(Roles.Admin)) list.Add(("audit", "Audit Report", "Security and business audit events."));
+}
+@foreach (var r in list)
+{
+    <div class="col-md-6 col-xl-4"><div class="card h-100"><div class="card-body"><h5>@r.name</h5><p class="text-muted">@r.desc</p>
+        <a class="btn btn-primary btn-sm" asp-action="Run" asp-route-id="@r.id">Open</a></div></div></div>
+}
+</div>

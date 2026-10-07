@@ -1,0 +1,20 @@
+@model List<UserListItem>
+@{ ViewData["Title"] = "Users"; }
+<div class="d-flex justify-content-between mb-3"><h3>Users</h3><a class="btn btn-primary" asp-action="Create"><i class="bi bi-plus-lg"></i> New User</a></div>
+<form method="get" class="row g-2 mb-3"><div class="col-md-5"><input name="q" value="@ViewBag.Q" class="form-control" placeholder="Search name or email" /></div><div class="col-md-2"><button class="btn btn-outline-primary w-100">Search</button></div></form>
+<div class="table-responsive card"><table class="table table-hover mb-0 align-middle">
+    <thead class="table-light"><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Lockout</th><th></th></tr></thead><tbody>
+    @foreach (var u in Model)
+    {
+        <tr><td>@u.FullName</td><td>@u.Email</td><td>@u.Role</td>
+            <td><span class="badge @(u.IsActive ? "bg-success" : "bg-secondary")">@(u.IsActive ? "Active" : "Inactive")</span></td>
+            <td>@if (u.IsLockedOut) { <span class="badge bg-danger">Locked</span> } else { <span class="text-muted">—</span> }</td>
+            <td class="text-end text-nowrap">
+                <a class="btn btn-sm btn-outline-primary" asp-action="Edit" asp-route-id="@u.Id">Edit</a>
+                <a class="btn btn-sm btn-outline-secondary" asp-action="ResetPassword" asp-route-id="@u.Id">Reset password</a>
+                @if (u.IsLockedOut) { <form asp-action="Unlock" asp-route-id="@u.Id" method="post" class="d-inline"><button class="btn btn-sm btn-warning">Unlock</button></form> }
+                <form asp-action="ToggleActive" asp-route-id="@u.Id" method="post" class="d-inline" onsubmit="return confirm('@(u.IsActive ? "Deactivate" : "Activate") this user?');"><button class="btn btn-sm btn-outline-danger">@(u.IsActive ? "Deactivate" : "Activate")</button></form>
+            </td></tr>
+    }
+    </tbody></table></div>
+<div class="mt-3"><partial name="_Pager" model="@(new ReportVm { Page = (int)ViewBag.Page, TotalPages = (int)ViewBag.TotalPages })" /></div>

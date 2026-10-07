@@ -1,0 +1,24 @@
+@model Lead
+@{ ViewData["Title"] = Model.LeadName; }
+<div class="d-flex justify-content-between mb-3">
+    <h3>@Model.LeadName <small class="text-muted">@Model.LeadCode</small> <span class="badge bg-primary fs-6">@Model.Status</span></h3>
+    <div class="d-flex gap-2">
+        @if (Model.Status == LeadStatus.Qualified)
+        { <form asp-action="Convert" asp-route-id="@Model.LeadId" method="post" onsubmit="return confirm('Convert this lead to a customer and opportunity?');"><button class="btn btn-success">Convert</button></form> }
+        <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.LeadId">Edit</a>
+        <a class="btn btn-outline-secondary" asp-action="Index">Back</a>
+    </div>
+</div>
+<div class="card card-body mb-3"><dl class="row mb-0">
+    <dt class="col-sm-2">Email</dt><dd class="col-sm-4">@Model.Email</dd><dt class="col-sm-2">Phone</dt><dd class="col-sm-4">@Model.Phone</dd>
+    <dt class="col-sm-2">Company</dt><dd class="col-sm-4">@Model.CompanyName</dd><dt class="col-sm-2">Source</dt><dd class="col-sm-4">@Model.Source</dd>
+    <dt class="col-sm-2">Priority</dt><dd class="col-sm-4">@Model.Priority</dd><dt class="col-sm-2">Expected Value</dt><dd class="col-sm-4">₹@Model.ExpectedValue.ToString("N0")</dd>
+    <dt class="col-sm-2">Assigned To</dt><dd class="col-sm-4">@Model.AssignedUser?.FullName</dd>
+    <dt class="col-sm-2">Converted</dt><dd class="col-sm-4">@if (Model.ConvertedCustomerId != null) { <a asp-controller="Customers" asp-action="Details" asp-route-id="@Model.ConvertedCustomerId">View customer</a> } else { <text>No</text> }</dd>
+    <dt class="col-sm-2">Notes</dt><dd class="col-sm-10">@Model.Notes</dd></dl></div>
+<div class="row g-3">
+    <div class="col-lg-6"><div class="card"><div class="card-header d-flex justify-content-between">Follow-Ups <a asp-controller="FollowUps" asp-action="Create" asp-route-leadId="@Model.LeadId">+ add</a></div><ul class="list-group list-group-flush">
+        @foreach (FollowUp f in ViewBag.FollowUps) { <li class="list-group-item">@f.FollowUpDate.ToString("dd MMM yyyy") — @f.Subject <span class="badge bg-secondary">@f.Status</span></li> }</ul></div></div>
+    <div class="col-lg-6"><div class="card"><div class="card-header d-flex justify-content-between">Activities <a asp-controller="Activities" asp-action="Create" asp-route-leadId="@Model.LeadId">+ add</a></div><ul class="list-group list-group-flush">
+        @foreach (Activity a in ViewBag.Activities) { <li class="list-group-item">@a.ActivityDate.ToString("dd MMM yyyy") — @a.ActivityType: @a.Subject</li> }</ul></div></div>
+</div>

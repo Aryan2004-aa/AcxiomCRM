@@ -1,0 +1,11 @@
+body { background:#f4f6fb; }
+.navbar-brand { font-weight:700; letter-spacing:.3px; }
+.card-kpi { border:0; border-left:4px solid #0d6efd; box-shadow:0 1px 3px rgba(0,0,0,.08); }
+.card-kpi .num { font-size:1.7rem; font-weight:700; }
+.card-kpi.green { border-left-color:#198754; } .card-kpi.red { border-left-color:#dc3545; }
+.card-kpi.amber { border-left-color:#fd7e14; } .card-kpi.purple { border-left-color:#6f42c1; }
+.table thead th { white-space:nowrap; }
+.field-validation-error, .text-danger { font-size:.85rem; }
+.login-box { max-width:430px; margin:6vh auto; }
+footer { color:#6c757d; font-size:.85rem; }
+.pipeline-col { min-width:230px; }

@@ -1,0 +1,12 @@
+@model Activity
+<div asp-validation-summary="ModelOnly" class="alert alert-danger py-2"></div>
+<div class="row g-3">
+    <div class="col-md-2"><label asp-for="ActivityType" class="form-label"></label><select asp-for="ActivityType" asp-items="Html.GetEnumSelectList<ActivityType>()" class="form-select"></select></div>
+    <div class="col-md-6"><label asp-for="Subject" class="form-label"></label><input asp-for="Subject" class="form-control" /><span asp-validation-for="Subject" class="text-danger"></span></div>
+    <div class="col-md-2"><label asp-for="ActivityDate" class="form-label"></label><input asp-for="ActivityDate" class="form-control" type="date" /><span asp-validation-for="ActivityDate" class="text-danger"></span></div>
+    <div class="col-md-2"><label asp-for="Status" class="form-label"></label><select asp-for="Status" asp-items="Html.GetEnumSelectList<ActivityStatus>()" class="form-select"></select></div>
+    <div class="col-md-4"><label asp-for="CustomerId" class="form-label"></label><select asp-for="CustomerId" asp-items="(SelectList)ViewBag.Customers" class="form-select"><option value="">-- None --</option></select></div>
+    <div class="col-md-4"><label asp-for="LeadId" class="form-label"></label><select asp-for="LeadId" asp-items="(SelectList)ViewBag.Leads" class="form-select"><option value="">-- None --</option></select></div>
+    <div class="col-md-4"><label asp-for="AssignedTo" class="form-label"></label><select asp-for="AssignedTo" asp-items="(SelectList)ViewBag.Users" class="form-select"></select></div>
+    <div class="col-12"><label asp-for="Description" class="form-label"></label><textarea asp-for="Description" class="form-control" rows="3"></textarea><span asp-validation-for="Description" class="text-danger"></span></div>
+</div>

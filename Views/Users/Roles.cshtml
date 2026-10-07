@@ -1,0 +1,7 @@
+@model Dictionary<string, int>
+@{ ViewData["Title"] = "Roles"; }
+<h3 class="mb-3">Roles</h3>
+<div class="card"><table class="table mb-0"><thead class="table-light"><tr><th>Role</th><th>Users</th></tr></thead><tbody>
+@foreach (var r in Model) { <tr><td>@r.Key</td><td>@r.Value</td></tr> }
+</tbody></table></div>
+<p class="text-muted mt-2">Roles are fixed (Admin, Manager, SalesExecutive). Assign a user's role from <a asp-action="Index">Users</a>.</p>

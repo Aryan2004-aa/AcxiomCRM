@@ -1,0 +1,64 @@
+@model DashboardVm
+@using System.Text.Json
+@{ ViewData["Title"] = "Dashboard"; }
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+    <h3 class="mb-0">Dashboard</h3>
+    <form method="get" class="d-flex flex-wrap gap-2 align-items-center">
+        <div class="btn-group btn-group-sm">
+            @foreach (var r in new[] { ("all", "All"), ("today", "Today"), ("week", "This Week"), ("month", "This Month") })
+            {
+                <a class="btn @(Model.Range == r.Item1 ? "btn-primary" : "btn-outline-primary")" asp-action="Index" asp-route-range="@r.Item1">@r.Item2</a>
+            }
+        </div>
+        <input type="hidden" name="range" value="custom" />
+        <input type="date" name="from" class="form-control form-control-sm" style="width:auto" value="@Model.From?.ToString("yyyy-MM-dd")" required />
+        <input type="date" name="to" class="form-control form-control-sm" style="width:auto" value="@Model.To?.ToString("yyyy-MM-dd")" required />
+        <button class="btn btn-sm @(Model.Range == "custom" ? "btn-primary" : "btn-outline-primary")">Custom range</button>
+    </form>
+</div>
+
+<div class="row g-3 mb-4">
+    @{
+        void Kpi(string title, string value, string css = "") {
+            <div class="col-6 col-md-4 col-xl-3"><div class="card card-kpi @css"><div class="card-body"><div class="text-muted small">@title</div><div class="num">@value</div></div></div></div>
+        }
+    }
+    @{ Kpi("Total Customers", Model.TotalCustomers.ToString()); }
+    @{ Kpi("Total Leads", Model.TotalLeads.ToString()); }
+    @{ Kpi("Open Leads", Model.OpenLeads.ToString(), "amber"); }
+    @{ Kpi("Total Opportunities", Model.TotalOpportunities.ToString()); }
+    @{ Kpi("Open Opportunities", Model.OpenOpportunities.ToString(), "amber"); }
+    @{ Kpi("Won Opportunities", Model.WonOpportunities.ToString(), "green"); }
+    @{ Kpi("Lost Opportunities", Model.LostOpportunities.ToString(), "red"); }
+    @{ Kpi("Total Pipeline Value", "₹" + Model.PipelineValue.ToString("N0"), "purple"); }
+    @{ Kpi("Weighted Pipeline", "₹" + Model.WeightedPipeline.ToString("N0"), "purple"); }
+    @{ Kpi("Pending Follow-Ups", Model.PendingFollowUps.ToString()); }
+    @{ Kpi("Overdue Follow-Ups", Model.OverdueFollowUps.ToString(), "red"); }
+    @if (Model.IsAdmin)
+    {
+        Kpi("Users", Model.TotalUsers.ToString());
+        Kpi("Locked Accounts", Model.LockedUsers.ToString(), "red");
+        Kpi("Failed Logins Today", Model.FailedLoginsToday.ToString(), "red");
+    }
+</div>
+
+<div class="row g-3">
+    <div class="col-lg-4"><div class="card"><div class="card-header">Lead Status</div><div class="card-body"><canvas id="leadChart"></canvas></div></div></div>
+    <div class="col-lg-4"><div class="card"><div class="card-header">Opportunity Pipeline</div><div class="card-body"><canvas id="stageChart"></canvas></div></div></div>
+    <div class="col-lg-4"><div class="card"><div class="card-header">Monthly Sales (Won, ₹)</div><div class="card-body"><canvas id="salesChart"></canvas></div></div></div>
+</div>
+
+@section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+    const colors = ['#0d6efd','#6f42c1','#198754','#fd7e14','#dc3545','#20c997'];
+    new Chart(document.getElementById('leadChart'), { type:'doughnut',
+        data:{ labels:@Html.Raw(JsonSerializer.Serialize(Model.LeadLabels)), datasets:[{ data:@Html.Raw(JsonSerializer.Serialize(Model.LeadCounts)), backgroundColor:colors }] } });
+    new Chart(document.getElementById('stageChart'), { type:'bar',
+        data:{ labels:@Html.Raw(JsonSerializer.Serialize(Model.StageLabels)), datasets:[{ label:'Opportunities', data:@Html.Raw(JsonSerializer.Serialize(Model.StageCounts)), backgroundColor:colors }] },
+        options:{ plugins:{legend:{display:false}}, scales:{ y:{ beginAtZero:true, ticks:{ precision:0 } } } } });
+    new Chart(document.getElementById('salesChart'), { type:'line',
+        data:{ labels:@Html.Raw(JsonSerializer.Serialize(Model.MonthLabels)), datasets:[{ label:'Won amount', data:@Html.Raw(JsonSerializer.Serialize(Model.MonthSales)), borderColor:'#198754', tension:.3, fill:false }] },
+        options:{ scales:{ y:{ beginAtZero:true } } } });
+</script>
+}

@@ -1,0 +1,13 @@
+@model IPaged
+@if (Model.TotalPages > 1)
+{
+    var route = new Dictionary<string, string>();
+    foreach (var kv in Context.Request.Query.Where(k => k.Key != "page")) route[kv.Key] = kv.Value.ToString();
+    <nav><ul class="pagination pagination-sm justify-content-center">
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            route["page"] = i.ToString();
+            <li class="page-item @(i == Model.Page ? "active" : "")"><a class="page-link" asp-all-route-data="route">@i</a></li>
+        }
+    </ul></nav>
+}
